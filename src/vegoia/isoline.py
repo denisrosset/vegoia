@@ -95,7 +95,18 @@ def refine3(l1: Lip, l2: Lip, l3: Lip, implicit: Implicit) -> Optional[Sequence[
 
 
 @dataclass
-class Isoline(ABC):
+class IsolineWIP:
+    starting_lip: Lip
+    path1: Sequence[Lip]
+    path2: Optional[Sequence[Lip]]
+
+    @staticmethod
+    def make(starting_lip: Lip) -> IsolineWIP:
+        pass
+
+
+@dataclass
+class Isoline:
     #: Matrix of lip coordinates, every row is (ix1, iy1, ix2, iy2)
     lips: Mat[i8]
 
@@ -117,6 +128,11 @@ class Isoline(ABC):
     def plot_coordinates(self) -> Tuple[Vec[f8], Vec[f8]]:
         """
         Returns the coordinates to plot this isoline
+
+        If the isoline is open, it returns the points of the isoline (:attr:`.x` and :attr:`.y`)
+
+        If the isoline is closed however, it repeats the starting point at the beginning and the
+        end so that you can draw a closed shape.
 
         Returns:
             A tuple (vec_x, vec_y)

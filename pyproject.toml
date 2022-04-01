@@ -6,19 +6,20 @@ name = "vegoia"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-beartype = {version = "^0.10.4", optional = true}
 matplotlib = "^3.0"
 numpy = "^1.21"
-python = ">=3.8,<3.11"
-scipy = "^1.8.0"
+python = ">=3.7,<3.11"
+scipy = "^1.7.0"
 typing-extensions = "^4.1.1"
 
+beartype = {version = "^0.10.4", optional = true}
 myst-nb = {version = "^0.13.2", optional = true}
 sphinx = {version = "4.3.2", optional = true}
 sphinx-autodoc-typehints = {version = "^1.17.0", optional = true}
 sphinx-book-theme = {version = "^0.2.0", optional = true}
 
 [tool.poetry.extras]
+beartype = ["beartype"]
 docs = [
   "myst-nb",
   "sphinx",
@@ -42,7 +43,7 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.7"
 
 files = [
   "src/vegoia",
@@ -86,7 +87,7 @@ testpaths = [
 
 [tool.black]
 line-length = 99
-target_version = ['py38']
+target_version = ['py37']
 
 [tool.doc8]
 max-line-length = 99
@@ -94,7 +95,7 @@ max-line-length = 99
 [tool.isort]
 line_length = 99
 profile = "black"
-py_version = 38
+py_version = 37
 
 [tool.commitizen]
 annotated_tag = true

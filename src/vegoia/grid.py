@@ -19,6 +19,10 @@ class Grid:
     x_divs: int
     y_divs: int
 
+    def __post_init__(self) -> None:
+        assert round(math.log2(self.x_divs)) == math.log2(self.x_divs)
+        assert round(math.log2(self.y_divs)) == math.log2(self.y_divs)
+
     def power_of_two_deltas(self, x_size: float, y_size: float) -> Tuple[int, int]:
         dx = x_size / (self.x_max - self.x_min) * self.x_divs
         dy = y_size / (self.y_max - self.y_min) * self.y_divs
@@ -29,8 +33,21 @@ class Grid:
         return min(dx, dy)
 
     @staticmethod
-    def make(x1: Float, x2: Float, y1: Float, y2: Float, x_divs: int, y_divs: int) -> Grid:
-        return Grid(float(x1), float(x2), float(y1), float(y2), x_divs, y_divs)
+    def make(
+        x_min: Float, x_max: Float, y_min: Float, y_max: Float, x_divs: int, y_divs: int
+    ) -> Grid:
+        """
+        Returns a coordinate system with a discrete grid
+
+        Args:
+            x_min: Minimum x coordinate
+            x_max: Maximum x coordinate
+            y_min: Minimum y coordinate
+            y_max: Maximum y coordinate
+            x_divs: Number of divisions of the range ``(x_min,x_max)``, must be a power-of-two
+            y_divs: Number of divisions of the range ``(x_min,x_max)``, must be a power-of-two
+        """
+        return Grid(float(x_min), float(x_max), float(y_min), float(y_max), x_divs, y_divs)
 
     @overload
     def unrounded_integer_coordinates(self, x: Float, y: Float) -> Tuple[Float, Float]:

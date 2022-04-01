@@ -10,24 +10,15 @@ from enum import Enum
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
     List,
-    Literal,
     Optional,
-    Protocol,
     Sequence,
     Tuple,
     Union,
-    overload,
 )
 
-import beartype.vale
 import numpy as np
-import numpy.typing as npt
-import scipy.sparse
-from numpy import linalg
 from scipy.ndimage import label
-from typing_extensions import Annotated
 
 from .grid import Grid
 from .types import *

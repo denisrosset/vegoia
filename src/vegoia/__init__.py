@@ -1,32 +1,12 @@
 from __future__ import annotations
 
-import logging
-import math
 import sys
-from abc import ABC, abstractmethod
-from collections import deque
 from dataclasses import dataclass
-from enum import Enum
-from re import X
-from typing import (
-    Any,
-    Callable,
-    List,
-    Literal,
-    Optional,
-    Protocol,
-    Sequence,
-    Tuple,
-    Union,
-    overload,
-)
+from typing import Callable, Optional, Tuple
 
-import beartype.vale
 import numpy as np
-import numpy.typing as npt
 import scipy.sparse
-from numpy import linalg
-from typing_extensions import Annotated
+from typing_extensions import Protocol, runtime_checkable
 
 from .grid import Grid
 from .isoline import Isoline
@@ -44,6 +24,7 @@ __all__ = [
 ]
 
 
+@runtime_checkable
 class Fun(Protocol):
     def __call__(self, x: float, y: float) -> float:
         pass
@@ -57,6 +38,20 @@ class Implicit:
     altitude: float
     eval_callback: Optional[Callable[[float, float, float], None]]
     line_callback: Optional[Callable[[float, float, float, float], None]]
+
+    @staticmethod
+    def make(
+        f: Callable[[float, float], float],
+        grid: Grid,
+        data: Data,
+        altitude: float,
+        eval_callback: Optional[Callable[[float, float, float], None]] = None,
+        line_callback: Optional[Callable[[float, float, float, float], None]] = None,
+    ) -> Implicit:
+        assert isinstance(f, Fun)
+        return Implicit(
+            f, grid, data, altitude, eval_callback=eval_callback, line_callback=line_callback
+        )
 
     def is_above(self, ix: int, iy: int) -> bool:
         return self.eval(ix, iy) >= self.altitude
@@ -103,13 +98,26 @@ class Implicit:
 
 @dataclass(frozen=True)
 class Data:
+    """
+    Class holding evaluted function points
+    """
+
     #: Data array, type of elements is :data:`numpy.float64`
-    cache: scipy.sparse.dok_array
+    #:
+    #: The size of this matrix is ``x_divs+1`` times ``y_divs+1``.
+    cache: scipy.sparse.dok_matrix
 
     x_divs: int
     y_divs: int
 
     @staticmethod
     def empty(x_divs: int, y_divs: int) -> Data:
-        cache = scipy.sparse.dok_array((x_divs + 1, y_divs + 1), dtype=np.float64)
+        """
+        Returns fresh empty storage for evaluated function points
+
+        Args:
+            x_divs: Number of x divisions, must be a power-of-two
+            y_divs: Number of y divisions, must be a power-of-two
+        """
+        cache = scipy.sparse.dok_matrix((x_divs + 1, y_divs + 1), dtype=np.float64)
         return Data(cache, x_divs, y_divs)
