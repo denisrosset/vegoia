@@ -1,6 +1,5 @@
 import typing
 
-import beartype.vale
 import numpy
 import numpy.typing
 from typing_extensions import Annotated
@@ -14,18 +13,21 @@ i8 = numpy.int64
 Float = typing.Union[numpy.float64, float]
 Int = typing.Union[numpy.int64, int]
 
-# Mat = Annotated[
-#     numpy.NDArray[numpy.ScalarType], beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[2]]
-# ]
-# Vec = Annotated[
-#     numpy.NDArray[numpy.ScalarType], beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[1]]
-# ]
-numpy.typing.NDArray
-Mat = Annotated[
-    numpy.typing.NDArray[_ScalarType],
-    beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[2]],
-]
-Vec = Annotated[
-    numpy.typing.NDArray[_ScalarType],
-    beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[1]],
-]
+if typing.TYPE_CHECKING:
+    Mat = numpy.typing.NDArray[_ScalarType]
+    Vec = numpy.typing.NDArray[_ScalarType]
+else:
+    try:
+        import beartype.vale
+
+        Mat = Annotated[
+            numpy.typing.NDArray[_ScalarType],
+            beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[2]],
+        ]
+        Vec = Annotated[
+            numpy.typing.NDArray[_ScalarType],
+            beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[1]],
+        ]
+    except ImportError:
+        Mat = (numpy.typing.NDArray[_ScalarType],)
+        Vec = numpy.typing.NDArray[_ScalarType]
