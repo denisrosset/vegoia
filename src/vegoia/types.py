@@ -5,7 +5,7 @@ import numpy
 import numpy.typing
 from typing_extensions import Annotated
 
-ScalarType = typing.TypeVar("ScalarType", bound=numpy.generic, covariant=True)
+_ScalarType = typing.TypeVar("_ScalarType", bound=numpy.generic, covariant=True)
 
 f8 = numpy.float64
 u4 = numpy.uint32
@@ -20,11 +20,12 @@ Int = typing.Union[numpy.int64, int]
 # Vec = Annotated[
 #     numpy.NDArray[numpy.ScalarType], beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[1]]
 # ]
+numpy.typing.NDArray
 Mat = Annotated[
-    numpy.ndarray[typing.Any, numpy.dtype[ScalarType]],
+    numpy.typing.NDArray[_ScalarType],
     beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[2]],
 ]
 Vec = Annotated[
-    numpy.ndarray[typing.Any, numpy.dtype[ScalarType]],
+    numpy.typing.NDArray[_ScalarType],
     beartype.vale.IsAttr["ndim", beartype.vale.IsEqual[1]],
 ]

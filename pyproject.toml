@@ -9,7 +9,7 @@ version = "0.1.0"
 beartype = "^0.10.4"
 matplotlib = "^3.0"
 numpy = "^1.21"
-python = ">=3.9,<3.11"
+python = ">=3.8,<3.11"
 scipy = "^1.8.0"
 typing-extensions = "^4.1.1"
 
@@ -42,7 +42,7 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.8"
 
 files = [
   "src/vegoia",
@@ -86,7 +86,7 @@ testpaths = [
 
 [tool.black]
 line-length = 99
-target_version = ['py39']
+target_version = ['py38']
 
 [tool.doc8]
 max-line-length = 99
@@ -94,7 +94,7 @@ max-line-length = 99
 [tool.isort]
 line_length = 99
 profile = "black"
-py_version = 39
+py_version = 38
 
 [tool.commitizen]
 annotated_tag = true
